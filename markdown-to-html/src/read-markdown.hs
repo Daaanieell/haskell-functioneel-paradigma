@@ -1,5 +1,5 @@
+module MyHelpers where
 
+helloWorld :: String
+helloWorld = putStrLn("hello world!")
 
-
-main = do
-    
