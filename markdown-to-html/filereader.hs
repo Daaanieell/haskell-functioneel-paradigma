@@ -13,6 +13,8 @@ import System.Environment
 --   [array] -> False
 --   _ -> False
 
+ouputPath = "output.html"
+
 -- i use this to check if there is an argument (needed for giving filepath to read)
 maybeArg :: [String] -> Maybe String
 maybeArg array =
@@ -37,6 +39,17 @@ checkForString input toCheckFor =
     then "something matched " ++ toCheckFor
     else "found nothing"
 
+-- TODO: get output from checkForString and add it into here
+addToHTML :: String -> String
+addToHTML input = "<p>" ++ input ++ "</p>"
+
+-- 2do
+-- read .md file
+-- check for some basic syntax
+-- if there is a match, return the html version
+-- somehow add it to a big string?
+-- write the big string to a file
+
 main = do
   -- printHelloWorld
   args <- getArgs
@@ -47,3 +60,5 @@ main = do
       putStrLn file
       putStrLn "----------check for string----------"
       putStrLn (checkForString file "#")
+      htmlContent <- return "hey"
+      writeFile ouputPath htmlContent
