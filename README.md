@@ -11,6 +11,7 @@
 ### Pattern matching
 
 - https://academy.fpblock.com/blog/pattern-matching/
+- https://stackoverflow.com/questions/8748660/is-there-a-better-way-to-write-a-string-contains-x-method
 
 ### Bestanden lezen
 

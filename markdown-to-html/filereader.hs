@@ -1,21 +1,24 @@
+import Data.List (isInfixOf)
 import Data.Maybe
 import System.Environment
-import MyHelpers (printHelloWorld)
+
+-- import MyHelpers (printHelloWorld)
 
 -- checkForFilepath :: String -> Bool
 -- checkForFilepath path =
 -- checkForFilepath path = isValid (path)
-isEmpty :: [a] -> Bool
-isEmpty array = case array of
-  [] -> True
-  [array] -> False
-  _ -> False
+-- isEmpty :: [a] -> Bool
+-- isEmpty array = case array of
+--   [] -> True
+--   [array] -> False
+--   _ -> False
 
+-- i use this to check if there is an argument (needed for giving filepath to read)
 maybeArg :: [String] -> Maybe String
 maybeArg array =
-  if null array
-    then Nothing
-    else Just (head array) -- don't know how to get rid of that partial function warning
+  case array of
+    [] -> Nothing
+    x : _ -> Just x
 
 -- need to check if array is empty or not, otherwise i cant use the just/nothing
 
@@ -28,11 +31,19 @@ maybeArg array =
 --     else do
 --       putStrLn "invalid path"
 
+checkForString :: String -> String -> String
+checkForString input toCheckFor =
+  if (isInfixOf toCheckFor input)
+    then "something matched " ++ toCheckFor
+    else "found nothing"
+
 main = do
-  printHelloWorld
+  -- printHelloWorld
   args <- getArgs
   case maybeArg args of
     Nothing -> putStrLn "invalid args"
     Just foundPath -> do
       file <- readFile foundPath
       putStrLn file
+      putStrLn "----------check for string----------"
+      putStrLn (checkForString file "#")
