@@ -1,6 +1,6 @@
 import Data.Maybe
 import System.Environment
-import MyHelpers
+import MyHelpers (printHelloWorld)
 
 -- checkForFilepath :: String -> Bool
 -- checkForFilepath path =
@@ -29,7 +29,7 @@ maybeArg array =
 --       putStrLn "invalid path"
 
 main = do
-  helloWorld
+  printHelloWorld
   args <- getArgs
   case maybeArg args of
     Nothing -> putStrLn "invalid args"
