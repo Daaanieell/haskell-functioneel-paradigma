@@ -7,6 +7,7 @@
 ### Haskell basics
 
 - https://stackoverflow.com/questions/15317895/correct-syntax-for-if-statements-in-haskell
+- https://stackoverflow.com/questions/9345589/guards-vs-if-then-else-vs-cases-in-haskell
 
 ### Pattern matching
 
@@ -16,6 +17,7 @@
 ### Bestanden lezen
 
 - https://hackage-content.haskell.org/package/base-4.22.0.0/docs/Prelude.html#v:readFile
+- https://stackoverflow.com/questions/11022163/haskell-read-lines-of-file
 
 ### Commandline
 

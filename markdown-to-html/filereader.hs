@@ -1,5 +1,7 @@
+import Control.Monad (forM, forM_)
 import Data.List (isInfixOf)
 import Data.Maybe
+import GHC.Generics (Generic (to))
 import System.Environment
 
 -- import MyHelpers (printHelloWorld)
@@ -17,12 +19,9 @@ ouputPath = "output.html"
 
 -- i use this to check if there is an argument (needed for giving filepath to read)
 maybeArg :: [String] -> Maybe String
-maybeArg array =
-  case array of
-    [] -> Nothing
-    x : _ -> Just x
-
--- need to check if array is empty or not, otherwise i cant use the just/nothing
+maybeArg array
+  | null array = Nothing
+  | otherwise = Just (head array)
 
 -- main = do
 --   [args] <- getArgs
@@ -33,32 +32,41 @@ maybeArg array =
 --     else do
 --       putStrLn "invalid path"
 
-checkForString :: String -> String -> String
-checkForString input toCheckFor =
-  if (isInfixOf toCheckFor input)
-    then "something matched " ++ toCheckFor
-    else "found nothing"
+-- needs to filter for md symbols
+
+-- 2do
+-- need to check if headings are FIRST in the line (otherwise the whole line will get a heading tag even if its in the middle of the line)
+-- check for other md syntax (bold and italic)
+-- add body/html tags to the output file
+checkForSyntax :: String -> String
+checkForSyntax line -- check each line for inline syntax, then add the heading tags?
+  | isInfixOf "# " line = "<h1>" ++ line ++ "</h1>"
+  | isInfixOf "## " line = "<h2>" ++ line ++ "</h2>"
+  | null line = line
+  | otherwise = "<p>" ++ line ++ "</p>"
+
+-- checkForInlineSyntax :: String -> String
+-- checkForInlineSyntax line
+--   |
 
 -- TODO: get output from checkForString and add it into here
 addToHTML :: String -> String
 addToHTML input = "<p>" ++ input ++ "</p>"
 
--- 2do
--- read .md file
--- check for some basic syntax
--- if there is a match, return the html version
--- somehow add it to a big string?
--- write the big string to a file
-
 main = do
-  -- printHelloWorld
   args <- getArgs
   case maybeArg args of
     Nothing -> putStrLn "invalid args"
     Just foundPath -> do
       file <- readFile foundPath
+      let fileLines = lines file
+      putStrLn "----------input file----------"
       putStrLn file
-      putStrLn "----------check for string----------"
-      putStrLn (checkForString file "#")
-      htmlContent <- return "hey"
-      writeFile ouputPath htmlContent
+
+      putStrLn "----------parsing----------"
+      htmlContent <- forM fileLines (\line -> return (checkForSyntax line))
+      writeFile ouputPath (unlines htmlContent)
+
+      putStrLn "----------output file----------"
+      output <- readFile ouputPath
+      putStrLn output
