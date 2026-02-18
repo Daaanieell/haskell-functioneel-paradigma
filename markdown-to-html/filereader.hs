@@ -1,5 +1,5 @@
 import Control.Monad (forM, forM_)
-import Data.List (isInfixOf)
+import Data.List (isInfixOf, isPrefixOf, stripPrefix)
 import Data.Maybe
 import GHC.Generics (Generic (to))
 import System.Environment
@@ -17,7 +17,6 @@ import System.Environment
 
 ouputPath = "output.html"
 
--- i use this to check if there is an argument (needed for giving filepath to read)
 maybeArg :: [String] -> Maybe String
 maybeArg array
   | null array = Nothing
@@ -35,23 +34,25 @@ maybeArg array
 -- needs to filter for md symbols
 
 -- 2do
--- need to check if headings are FIRST in the line (otherwise the whole line will get a heading tag even if its in the middle of the line)
--- check for other md syntax (bold and italic)
+-- check for other md syntax (!!! https://www.markdownguide.org/basic-syntax/)
+-- lists, bold, italics and tips, code blocks, links, images, blockquotes, tables, etc ...
 -- add body/html tags to the output file
+-- remove the md syntax from the output file
 checkForSyntax :: String -> String
 checkForSyntax line -- check each line for inline syntax, then add the heading tags?
-  | isInfixOf "# " line = "<h1>" ++ line ++ "</h1>"
-  | isInfixOf "## " line = "<h2>" ++ line ++ "</h2>"
+  | isPrefixOf "# " line = "<h1>" ++ removeMarkdownSyntax line "# " ++ "</h1>"
+  | isPrefixOf "## " line = "<h2>" ++ removeMarkdownSyntax line "## " ++ "</h2>"
+  | isPrefixOf "### " line = "<h3>" ++ removeMarkdownSyntax line "### " ++ "</h3>"
+  | isPrefixOf "---" line || isPrefixOf "___" line || isPrefixOf "***" line = "<hr>"
+  | isPrefixOf "- " line = "<li>" ++ removeMarkdownSyntax line "- " ++ "</li>"
+  | isPrefixOf "* " line = "<li>" ++ removeMarkdownSyntax line "* " ++ "</li>"
   | null line = line
   | otherwise = "<p>" ++ line ++ "</p>"
 
--- checkForInlineSyntax :: String -> String
--- checkForInlineSyntax line
---   |
-
--- TODO: get output from checkForString and add it into here
-addToHTML :: String -> String
-addToHTML input = "<p>" ++ input ++ "</p>"
+removeMarkdownSyntax :: String -> String -> String
+removeMarkdownSyntax input toRemove
+  | isPrefixOf toRemove input = fromMaybe input (stripPrefix toRemove input)
+  | otherwise = input
 
 main = do
   args <- getArgs

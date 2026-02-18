@@ -1,13 +1,20 @@
 # .md to HTML
 
+Zie [reflectieverslag](./Reflectieverslag.md)
+
 [Opdracht](https://aim-cni.github.io/app/docs/Paradigma%20challenge/opdracht_functioneel_programmeren#markdown-to-html-converter)
 
 ## Handige bronnen
+
+### Markdown cheatsheet
+
+- https://www.markdownguide.org/basic-syntax/
 
 ### Haskell basics
 
 - https://stackoverflow.com/questions/15317895/correct-syntax-for-if-statements-in-haskell
 - https://stackoverflow.com/questions/9345589/guards-vs-if-then-else-vs-cases-in-haskell
+- http://www.zvon.org/other/haskell/Outputmaybe/fromMaybe_f.html
 
 ### Pattern matching
 
