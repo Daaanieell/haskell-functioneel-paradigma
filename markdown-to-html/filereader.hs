@@ -47,7 +47,14 @@ checkForSyntax line -- check each line for inline syntax, then add the heading t
   | isPrefixOf "- " line = "<li>" ++ removeMarkdownSyntax line "- " ++ "</li>"
   | isPrefixOf "* " line = "<li>" ++ removeMarkdownSyntax line "* " ++ "</li>"
   | null line = line
-  | otherwise = "<p>" ++ line ++ "</p>"
+  | otherwise = "<p>" ++ line ++ "</p>" -- this should call the inline parse function
+
+parseForInlineSyntaxRecursive :: String -> String
+parseForInlineSyntaxRecursive [] = ""
+parseForInlineSyntaxRecursive (letter:rest) = parseLetter letter ++ parseForInlineSyntaxRecursive rest
+
+parseLetter :: Char ->
+
 
 removeMarkdownSyntax :: String -> String -> String
 removeMarkdownSyntax input toRemove
