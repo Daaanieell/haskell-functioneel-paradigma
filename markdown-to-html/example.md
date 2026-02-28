@@ -11,6 +11,7 @@ this text contains a **bold** tag and another
 this *text* contains italics tag
 
 this sentence has **bold**, __underscore bold__, _underscore italics_ and *italics*! also **_both_**!
+
 ### my heading 3 chapter###
 
 sdfkjasdlkfjhasdf#_ushdfj#_
