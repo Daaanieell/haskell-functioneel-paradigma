@@ -6,6 +6,11 @@ this 100% is a **file** used for testing
 
 dfjasdfkjhasfkhwe#hjwk3hk# 3j42l4
 
+this text contains a **bold** tag and another
+
+this *text* contains italics tag
+
+this sentence has **bold**, __underscore bold__, _underscore italics_ and *italics*! also **_both_**!
 ### my heading 3 chapter###
 
 sdfkjasdlkfjhasdf#_ushdfj#_
