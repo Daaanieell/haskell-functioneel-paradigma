@@ -8,9 +8,9 @@ dfjasdfkjhasfkhwe#hjwk3hk# 3j42l4
 
 this text contains a **bold** tag and another
 
-this *text* contains italics tag
+this _text_ contains italics tag
 
-this sentence has **bold**, __underscore bold__, _underscore italics_ and *italics*! also **_both_**!
+this sentence has **bold**, **underscore bold**, _underscore italics_ and _italics_!
 
 ### my heading 3 chapter###
 
@@ -18,11 +18,11 @@ sdfkjasdlkfjhasdf#_ushdfj#_
 
 three minus signs
 
----
+-----
 
 three asterisks
 
-***
+******
 
 three underscores
 
@@ -30,8 +30,8 @@ ___
 
 my list:
 
-- minus sign
-- minus sign 2
+- minus *sign*
+- minus **sign 2**
 
 * asterisk
 * asterisk 2

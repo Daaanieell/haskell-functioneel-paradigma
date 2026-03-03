@@ -3,8 +3,6 @@ module FileReader
   )
 where
 
-import Distribution.Simple.Test (test)
-
 maybeArg :: [String] -> Maybe String
 maybeArg array
   | null array = Nothing

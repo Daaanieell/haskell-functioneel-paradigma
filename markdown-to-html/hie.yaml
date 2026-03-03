@@ -4,3 +4,4 @@ cradle:
       - MarkdownParser.hs
       - InlineParser.hs
       - FileReader.hs
+      - MarkdownHelper.hs
