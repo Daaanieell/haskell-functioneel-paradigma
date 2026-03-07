@@ -12,10 +12,6 @@ import Data.List (isInfixOf, isPrefixOf, stripPrefix)
 import Data.Maybe (fromMaybe)
 
 -- wrapped een gegeven string met een gegeven tag
-
--- voorbeeld:
--- input: wrapWith "Haskell!" "h1"
--- output: <h1> Haskell! </h1>
 wrapWith :: String -> String -> String
 wrapWith toWrap tag = "<" ++ tag ++ "> " ++ toWrap ++ " </" ++ tag ++ ">"
 
@@ -26,12 +22,12 @@ removeListSyntax line
   | isPrefixOf "* " line = fromMaybe line (stripPrefix "* " line)
   | otherwise = line
 
--- gegeven een (x:xs) checkt het of de eerste twee karakters een * of _ is
+-- gegeven een string checkt het of de eerste twee karakters een * of _ is
 -- wordt gebruikt in de inline parser om te checken of iets bold is
 checkForBold :: Char -> String -> Bool
 checkForBold _ [] = False
 checkForBold char rest
-  | char == '*' && head rest == '*' || char == '_' && head rest == '_' = True
+  | char == '*' && head rest == '*' || char == '_' && head rest == '_' = True -- bij een (x:xs) checkt het of de eerste karakter 'x' en eerste van de 'xs' hetzelfde is
   | otherwise = False
 
 -- checkt of karakter een * of _ is
