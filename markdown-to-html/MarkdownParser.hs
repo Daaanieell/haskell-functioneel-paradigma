@@ -4,13 +4,12 @@ import Control.Monad (forM, forM_)
 import Data.List (isInfixOf, isPrefixOf, stripPrefix)
 import Data.Maybe
 import Data.String (String)
-import FileReader (maybeArg)
 import GHC.Internal.Text.Read (Lexeme (String))
 import InlineParser (replaceInlineSyntax)
 import MarkdownHelper (isHorizontalLine, isList, removeListSyntax, wrapWith)
 import System.Environment
 
-ouputPath = "output.html"
+outputPath = "output.html"
 
 -- dit is verantwoordelijk voor regel bij regel parsen
 -- heeft checks per .md syntax: headings, horizontal line, lists en algemene inline parsing (bold en italics)
@@ -35,7 +34,7 @@ replaceHeadings line = go line "###### "
            in wrapWith content (headingTag toMatchFor) -- er is een match, wrap
       | otherwise = go line (drop 1 toMatchFor) -- als er geen matches zijn, dan zoekt het naar een grotere heading (minder #'s)
 
-    -- wordt gebruikt om de heading nummer om te zetten naar iets wat 'wrapWith' kan gebruiken (bv 'h1')
+    -- wordt gebruikt om de md headings om te zetten naar iets wat 'wrapWith' kan gebruiken (bv 'h1')
     headingTag :: String -> String
     headingTag hashtags = "h" ++ show (length (filter (== '#') hashtags))
 
@@ -45,21 +44,12 @@ replaceHeadings line = go line "###### "
       | isPrefixOf toRemove line = fromMaybe line (stripPrefix toRemove line)
       | otherwise = line
 
--- wrapListItems :: String -> String
--- wrapListItems html = go html
---   where
---     go :: String -> String -> Bool
---     go html acc isInList
---       |
-
--- 2do, kan dit beter?
 main = do
   args <- getArgs
-  case maybeArg args of
-    Nothing -> putStrLn "invalid args"
-    Just foundPath -> do
-      file <- readFile foundPath
-      let fileLines = lines file
-      htmlContent <- forM fileLines (\line -> return (checkForSyntax line))
-      writeFile ouputPath (unlines htmlContent)
-      putStrLn "finished"
+  if null args
+    then putStrLn "invalid args"
+    else do
+      let foundPath = head args
+      htmlLines <- map checkForSyntax . lines <$> readFile foundPath
+      writeFile outputPath (unlines htmlLines)
+      putStrLn ("finished, see output: " ++ outputPath)
