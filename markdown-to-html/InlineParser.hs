@@ -15,7 +15,8 @@ replaceInlineSyntax inputString = go False "" inputString -- helper functie voor
     go :: Bool -> String -> String -> String
     go _ acc [] = acc
     go inSyntax acc (char : rest) -- dit looped totdat de string volledig gelezen is
-      | checkForBold char rest = -- checked voor bold syntax
+      | checkForBold char rest -- checked voor bold syntax
+        =
           go (not inSyntax) (acc ++ openOrCloseTag inSyntax "b") (tail rest) -- zet de bijbehorende tag eraan
       | checkForItalics char =
           go (not inSyntax) (acc ++ openOrCloseTag inSyntax "i") rest

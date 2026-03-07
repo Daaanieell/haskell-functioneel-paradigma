@@ -1,14 +1,14 @@
 module MarkdownHelper
   ( wrapWith,
-    removeMarkdownSyntax,
     checkForBold,
     checkForItalics,
     isList,
     isHorizontalLine,
+    removeListSyntax,
   )
 where
 
-import Data.List (isPrefixOf, stripPrefix)
+import Data.List (isInfixOf, isPrefixOf, stripPrefix)
 import Data.Maybe (fromMaybe)
 
 -- wrapped een gegeven string met een gegeven tag
@@ -19,12 +19,12 @@ import Data.Maybe (fromMaybe)
 wrapWith :: String -> String -> String
 wrapWith toWrap tag = "<" ++ tag ++ "> " ++ toWrap ++ " </" ++ tag ++ ">"
 
--- 2do verander dit?
--- haalt een gegeven prefix string weg uit input
-removeMarkdownSyntax :: String -> String -> String
-removeMarkdownSyntax input toRemove
-  | isPrefixOf toRemove input = fromMaybe input (stripPrefix toRemove input)
-  | otherwise = input
+-- 2do, zet dit als helper ergens
+removeListSyntax :: String -> String
+removeListSyntax line
+  | isPrefixOf "- " line = fromMaybe line (stripPrefix "- " line)
+  | isPrefixOf "* " line = fromMaybe line (stripPrefix "* " line)
+  | otherwise = line
 
 -- gegeven een (x:xs) checkt het of de eerste twee karakters een * of _ is
 -- wordt gebruikt in de inline parser om te checken of iets bold is
