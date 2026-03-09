@@ -163,22 +163,22 @@ Ik moet meer letten op
 
 ## Bronvermelding
 ### Markdown cheatsheet
- - _Basic Syntax | Markdown Guide_. (z.d.). https://www.markdownguide.org/basic-syntax/ Geraadpleegd op 2026:03:09
+ - _Basic Syntax | Markdown Guide_. (z.d.). https://www.markdownguide.org/basic-syntax/ Geraadpleegd op 2026:02:18
 ### Haskell basics
- - Correct syntax for if statements in Haskell. (z.d.). Stack Overflow. https://stackoverflow.com/questions/15317895/correct-syntax-for-if-statements-in-haskell Geraadpleegd op 2026:03:09
- - Guards vs if-then-else vs cases in Haskell. (z.d.). Stack Overflow. https://stackoverflow.com/questions/9345589/guards-vs-if-then-else-vs-cases-in-haskell Geraadpleegd op 2026:03:09
- - fromMaybe — Zvon Haskell references. (z.d.). http://www.zvon.org/other/haskell/Outputmaybe/fromMaybe_f.html Geraadpleegd op 2026:03:09
- - Claude AI share (f343677d). (z.d.). https://claude.ai/share/f343677d-c70a-48be-b793-b8b9e35446b4 Geraadpleegd op 2026:03:09
- - findIndex — Zvon Haskell references. (z.d.). http://www.zvon.org/other/haskell/Outputlist/findIndex_f.html Geraadpleegd op 2026:03:09
- - Let vs. Where — Haskell Wiki. (z.d.). https://wiki.haskell.org/Let_vs._Where#:~:text=It%20is%20important%20to%20know,line%20of%20a%20function%20definition. Geraadpleegd op 2026:03:09
- - Claude AI share (6f47665d). (z.d.). https://claude.ai/share/6f47665d-c78b-48e2-a3ed-37f980ee7f44 Geraadpleegd op 2026:03:09
+ - Correct syntax for if statements in Haskell. (z.d.). Stack Overflow. https://stackoverflow.com/questions/15317895/correct-syntax-for-if-statements-in-haskell Geraadpleegd op 2026:02:09
+ - Guards vs if-then-else vs cases in Haskell. (z.d.). Stack Overflow. https://stackoverflow.com/questions/9345589/guards-vs-if-then-else-vs-cases-in-haskell Geraadpleegd op 2026:02:17
+ - fromMaybe — Zvon Haskell references. (z.d.). http://www.zvon.org/other/haskell/Outputmaybe/fromMaybe_f.html Geraadpleegd op 2026:02:18
+ - Claude AI share (f343677d). (z.d.). https://claude.ai/share/f343677d-c70a-48be-b793-b8b9e35446b4 Geraadpleegd op 2026:02:28
+ - findIndex — Zvon Haskell references. (z.d.). http://www.zvon.org/other/haskell/Outputlist/findIndex_f.html Geraadpleegd op 2026:02:28
+ - Let vs. Where — Haskell Wiki. (z.d.). https://wiki.haskell.org/Let_vs._Where#:~:text=It%20is%20important%20to%20know,line%20of%20a%20function%20definition. Geraadpleegd op 2026:02:28
+ - Claude AI share (6f47665d). (z.d.). https://claude.ai/share/6f47665d-c78b-48e2-a3ed-37f980ee7f44 Geraadpleegd op 2026:02:28
 ### Pattern matching
- - Pattern matching — FP Block Academy. (z.d.). https://academy.fpblock.com/blog/pattern-matching/ Geraadpleegd op 2026:03:09
- - Is there a better way to write a string contains X method? (z.d.). Stack Overflow. https://stackoverflow.com/questions/8748660/is-there-a-better-way-to-write-a-string-contains-x-method Geraadpleegd op 2026:03:09
- - Claude AI share (85daaf36). (z.d.). https://claude.ai/share/85daaf36-782d-4146-85e6-9dcf640c8a82 Geraadpleegd op 2026:03:09
- - Claude AI share (f78c3152). (z.d.). https://claude.ai/share/f78c3152-d80e-491b-b0ef-3d61b38d4c81 Geraadpleegd op 2026:03:09
+ - Pattern matching — FP Block Academy. (z.d.). https://academy.fpblock.com/blog/pattern-matching/ Geraadpleegd op 2026:02:09
+ - Is there a better way to write a string contains X method? (z.d.). Stack Overflow. https://stackoverflow.com/questions/8748660/is-there-a-better-way-to-write-a-string-contains-x-method Geraadpleegd op 2026:02:11
+ - Claude AI share (85daaf36). (z.d.). https://claude.ai/share/85daaf36-782d-4146-85e6-9dcf640c8a82 Geraadpleegd op 2026:02:28
+ - Claude AI share (f78c3152). (z.d.). https://claude.ai/share/f78c3152-d80e-491b-b0ef-3d61b38d4c81 Geraadpleegd op 2026:02:28
 ### Bestanden lezen
- - Prelude — readFile (Hackage). (z.d.). https://hackage-content.haskell.org/package/base-4.22.0.0/docs/Prelude.html#v:readFile Geraadpleegd op 2026:03:09
- - Haskell — read lines of file (Stack Overflow). (z.d.). https://stackoverflow.com/questions/11022163/haskell-read-lines-of-file Geraadpleegd op 2026:03:09
+ - Prelude — readFile (Hackage). (z.d.). https://hackage-content.haskell.org/package/base-4.22.0.0/docs/Prelude.html#v:readFile Geraadpleegd op 2026:02:09
+ - Haskell — read lines of file (Stack Overflow). (z.d.). https://stackoverflow.com/questions/11022163/haskell-read-lines-of-file Geraadpleegd op 2026:02:17
 ### Commandline
- - Friedbrice — Gist (ef852a5c). (z.d.). https://gist.github.com/friedbrice/ef852a5c61e80686d659024aad3cbd70 Geraadpleegd op 2026:03:09
+ - Friedbrice — Gist (ef852a5c). (z.d.). https://gist.github.com/friedbrice/ef852a5c61e80686d659024aad3cbd70 Geraadpleegd op 2026:02:09
