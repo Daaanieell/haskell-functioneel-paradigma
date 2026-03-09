@@ -1,45 +1,169 @@
 # Rapport
-
-> mag in md
-
-
-## Inleiding
+**Student:** Daniel Sung (2128145)
+**Datum:** 7 maart, 2026
+**Versie:** 1
+**Docent:** Michel Koolwaaij
+**Klas:** ITA-CNI-A-f 2025
 
 ## Inhoudopgave
+> WIP
 
+## Inleiding
+> WIP
+### Overview van opdracht
 Voor mijn opdracht zal ik een .md naar .html parser maken in Haskell. Het zal een CLI tool zijn waarbij je een .md bestand kan opgeven als argument. Dit parsed dan de gegeven .md bestand en zet het om naar een .html bestand.
 
-Hierbij wordt het volgende opgevangen:
-- Headings vanaf 1 t/m 6
-- Horizontal lines
-- Lists
-- Inline syntax:
-	- Bold
-	- Italics
+### Waarom Haskell?
+De keuze voor Haskell was gebaseerd op twee redenen. Ten eerste wordt Haskell tijdens de lessen gebruikt als voorbeeld waardoor ik de codevoorbeelden uit de les mogelijk kan gebruiken als input voor mijn eigen opdracht. Ook bleek uit een korte onderzoek dat Haskell een populaire functionele taal is, met veel beschikbare documentatie.
 
-Voorbeeld van gebruik:
-```bash
-> mijnParser.hs pad/naar/jouw/md/document.md
-> Output naar: "pad/naar/jouw/html/document.html"
-```
 
 ## Onderzoek
 > TODO: koppel concepten van Haskell aan mijn code!
 
-
+Voor mijn onderzoek heb ik voornamelijk 
 
 
 ## Challenge
+> WIP
+
+### Opdrachtomschrijving
+Een .md naar .html parser in Haskell. Dit is een CLI-tool waarbij een gegeven bestand als args gegeven kan worden. 
+
+Het moet de volgende syntaxis omzetten:
+- Headings met grootte vanaf 1 t/m 6
+- Horizontal lines
+- Lists (Hier had ik wat problemen mee, wordt later uitgelegd)
+- Inline syntax:
+	- Bold
+	- Italics
+
+### Uitdaging
+De grootste uitdaging voor mij ligt bij het 
+
+
+Om markdown te parsen moet er gelet worden op:
+- State tracking over meerdere regels
+    - List items wrappen in `<ul>` of `<ol>` tags, je moet rekening houden met wat er in een list zit.
+    - Het programma werkt line-by-line, maar moet onthouden of je in een list bent
+- Overlappende syntax
+    - Inline syntax (bold/italic) kan voorkomen in headings, lijstitems, paragrafen
+    - Alles moet correct geparsed worden ongeacht context
+- Prioriteit van regels
+    - Bepalen welke syntax eerst gecheckt wordt (heading vs list vs paragraph)
+    - Zeker stellen dat de juiste tag wordt toegepast
+- Foutieve syntax
+    - Gebroken inline syntax (`**bold*`)
+    - Gemengde list syntax (`*` en `-` door elkaar)
+
+En natuurlijk gebruik van Haskell/functionele programmeertalen, ik heb hier nog nooit eerder mee gewerkt, dus weet ik niet wat best practice is.
 
 ## Implementatie
+> WIP, zet hier nog iets bij over problemen met lists en dergelijke
+
+In dit hoofdstuk wordt de implementatie uitgelegd per bestand. Elk sub-hoofdstuk heeft een samenvatting van wat het doet, gekoppeld aan functionele concepten. Ook is er een korte uitleg per functie. Niet elke functie wordt omschreven, alleen de interessante/relevante.
+
+In Haskell is alles immutable, dus wordt dit ook niet opgeschreven bij de 'kenmerken'.
+
+Zie:
+- [MarkdownParser.hs](markdown-to-html/MarkdownParser.hs): hoofdbestand, dit is wat je uitvoert. Het roept de helper en inline parser aan.
+- [MarkdownHelper.hs](markdown-to-html/MarkdownHelper.hs): bevat voornamelijk check functies
+- [InlineParser.hs](markdown-to-html/InlineParser.hs): is verantwoordelijk voor itereren door een line en Markdown syntax daarbinnen herkennen en parsen ervan.
+
+Voor de implementatie heb ik de volgende regels vastgesteld:
+- De parser zal niet foutieve syntax proberen om te zetten naar geldige syntax, bv: `##mijn heading` wordt niet gelezen als `## mijn heading`.
+- De kleinste heading is h6
+
+### MarkdownParser.hs
+Dit is het hoofdbestand van de parser. Het roept de inline parser en helper bestand aan. Het parsed Markdown door het bestand op te splitsen in lijnen, vervolgens worden de lijnen geclassificeerd in 4 types:
+1. Headings: `## Mijn heading`
+2. Horizontal lines : `---` , `***` of `___`
+3. Lists: een string die begint met `- mijn tekst` of `* mijn tekst`
+4. Paragraphs: gewone tekst
+
+Op basis van die 4 types worden functies aangeroepen die het parsen. Dit bestand gebruikt recursie voor het checken van headinggrootte en pattern matching binnen die recursie als base case.
+
+Heeft de volgende functies:
+- `checkForSyntax :: String -> String`
+- `replaceHeadings :: String -> String`
+- `main = do`
+
+#### checkForSyntax
+`checkForSyntax` checkt per lijn wat voor een type het is. Dit kan een heading, horizontal-line, list, of gewoon een paragraph zijn. Dit wordt gedaan met guards en helper functies om te bepalen wat een lijn bevat. Ook maakt het maakt gebruik van `replaceHeadings` om Markdown headings om te zetten naar HTML headings.
+
+Kenmerken:
+- Pure function
+- Pattern matching
+#### replaceHeadings
+`replaceHeadings` is een recursieve functie, het looped vanaf `###### ` (h6) naar `# ` (h1) en checkt of het matched met de begin van een lijn. Het heeft lokale helper functies voor het weghalen van Markdown syntax en het parsen naar een HTML tag. Ook maakt het gebruikt patternmatching voor de base case; het heeft dan elke heading vanaf h6 gecheckt.
+
+Kenmerken:
+- Pure function
+- Recursie
+- Pattern matching
+#### main
+Gebruikt een `map` om door de lijst van lines te itereren, dit is een higher order functie. De output van de map wordt naar een .html bestand geschreven.
+
+> WIP
+
+### MarkdownHelper.hs
+Dit bestand bevat voornamelijk checks, het heeft functies voor het checken voor inline syntax, of iets een list is, etc.  Wordt gebruikt in de andere twee bestanden. `isHorizontalLine` gebruikt recursie en pattern matching.
+
+Heeft de volgende functies:
+- `wrapWith :: String -> String -> String`
+- `removeListSyntax :: String -> String`
+- `checkForBold :: Char -> String -> Bool`
+- `checkForItalics :: Char -> Bool`
+- `isList :: String -> Bool`
+- `isHorizontalLine :: String -> Bool`
+
+#### isHorizontalLine
+`isHorizontalLine` heeft een recursieve helper functie om bij te houden of iets een horizontal line is. Gebruikt pattern matching als base case om te herkennen of er meer dan 3 van dezelfde tekens zijn.  
+
+Kenmerken
+- Pure function
+- Recursie
+- Pattern matching
+
+### InlineParser.hs
+Dit bestand is verantwoordelijk voor het parsen van inline Markdown syntax zoals bold en italics. Het exporteert alleen `replaceInlineSyntax`, die wordt aangeroepen vanuit `MarkdownParser.hs`.
+
+Heeft de volgende functies:
+- `replaceInlineSyntax :: String -> String`
+#### replaceInlineSyntax
+`replaceInlineSyntax` parsed een string letter voor letter via een recursieve helper functie `go`. Het gebruikt een accumulator om de output op te bouwen. Als een karakter bold of italics syntax is, wordt de juiste HTML tag toegevoegd via de lokale helper functie `openOrCloseTag`.
+
+Kenmerken:
+- Pure function
+- Recursie
+- Pattern matching
 
 ## Reflectie
+> WIP
 
+### Functionele paradigma
+
+**Recursie en lokale helper functies**  
+Tijdens het leren van Haskell was voor mij gebruik van recursie het meest interessant, er zijn geen echte for loops in Haskell vanwege immutability. Dit maakte het uitlezen en schrijven in een array moeilijker, je hebt geen `i` , je moet het doen met recursie.
+
+Waar ik wel achter kwam was het gebruik van lokale helper functies (zie `isHorizontalLine` of `replaceInlineSyntax`) dit maakt recursie voor mij een stuk netter. De recursieve functie is gebundeld in een functie die je gemakkelijk kan aanroepen en hierdoor hoef je geen extra parameters te hebben.
+
+**Moeilijkheden met immutability**  
+Waar ik moeite mee had was het missen van mutable variabelen. In andere talen zou ik een `Bool` opslaan om bij te houden of de parser zich binnen een `<ul>` of `<ol>` bevindt, en deze aanpassen per regel. In Haskell is dit niet mogelijk omdat variabelen immutable zijn. 
+
+Omdat mijn logica gebaseerd is op het itereren door regels heen, was dit lastig op te lossen. Uiteindelijk heb ik besloten om alleen de `<li>` tag toe te voegen en de list items niet te wrappen in een `<ul>` of `<ol>` tag, omdat ik hier te veel tijd aan kwijt was.
+
+Terugkijkend moest ik een stuk meer letten op hoe ik 'begin' met parsen, de `checkForSyntax` functie moest anders. In plaats van elke lijn itereren, moet het per letter parsen, dit zou de list-probleem voorkomen. Hierdoor zou ik gemakkelijker de state kunnen bijhouden, dus of iets in een list, bold of italics zit. Hier kwam ik te laat pas achter en was het niet meer waard om alles te refactoren.
 ## Conclusie
+> WIP
+
+Parsen van lists is veel moeilijker dan verwacht, mijn aanpak van het markdown bestand omzetten naar lines en door elke line itereren werkte hier niet goed voor. 
+
+Ik moet meer letten op 
+
 
 ## Bronvermelding
 ### Markdown cheatsheet
-- https://www.markdownguide.org/basic-syntax/
+- _Basic Syntax | Markdown Guide_. (z.d.). https://www.markdownguide.org/basic-syntax/
 
 ### Haskell basics
 - https://stackoverflow.com/questions/15317895/correct-syntax-for-if-statements-in-haskell
