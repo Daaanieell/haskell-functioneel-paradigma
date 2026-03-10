@@ -1,20 +1,53 @@
 # Rapport
-**Student:** Daniel Sung (2128145)
-**Datum:** 7 maart, 2026
-**Versie:** 1
-**Docent:** Michel Koolwaaij
-**Klas:** ITA-CNI-A-f 2025
+
+Markdown naar HTML parser
+- **Student:** Daniel Sung (2128145)
+- **Datum:** 10 maart, 2026
+- **Versie:** 1
+- **Docent:** Michel Koolwaaij
+- **Klas:** ITA-CNI-A-f 2025
 
 ## Inhoudopgave
-> WIP
+
+- **[Inleiding](#inleiding)**
+    - [Overview van opdracht](#overview-van-opdracht)
+    - [Waarom Haskell?](#waarom-haskell)
+- **[Onderzoek](#onderzoek)**
+- **[Challenge](#challenge)**
+    - [Opdrachtomschrijving](#opdrachtomschrijving)
+    - [Uitdaging](#uitdaging)
+- **[Implementatie](#implementatie)**
+    - [MarkdownParser.hs](#markdownparserhs)
+        - [checkForSyntax](#checkforsyntax)
+        - [replaceHeadings](#replaceheadings)
+        - [main](#main)
+    - [MarkdownHelper.hs](#markdownhelperhs)
+        - [isHorizontalLine](#ishorizontalline)
+    - [InlineParser.hs](#inlineparserhs)
+        - [replaceInlineSyntax](#replaceinlinesyntax)
+- **[Reflectie](#reflectie)**
+    - [Functionele paradigma](#functionele-paradigma)
+- **[Conclusie](#conclusie)**
+- **[Bronvermelding](#bronvermelding)**
+    - [Markdown cheatsheet](#markdown-cheatsheet)
+    - [Haskell basics](#haskell-basics)
+    - [Pattern matching](#pattern-matching)
+    - [Bestanden lezen](#bestanden-lezen)
+    - [Commandline](#commandline)
 
 ## Inleiding
-> WIP
-### Overview van opdracht
-Voor mijn opdracht zal ik een .md naar .html parser maken in Haskell. Het zal een CLI tool zijn waarbij je een .md bestand kan opgeven als argument. Dit parsed dan de gegeven .md bestand en zet het om naar een .html bestand.
 
-### Waarom Haskell?
-De keuze voor Haskell was gebaseerd op twee redenen. Ten eerste wordt Haskell tijdens de lessen gebruikt als voorbeeld waardoor ik de codevoorbeelden uit de les mogelijk kan gebruiken als input voor mijn eigen opdracht. Ook bleek uit een korte onderzoek dat Haskell een populaire functionele taal is, met veel beschikbare documentatie.
+In dit rapport wordt een Markdown-naar-HTML parser beschreven, geïmplementeerd in Haskell. Het doel is om functionele concepten zoals pure functions, recursie en pattern matching toe te passen in een praktische context.
+
+> WIP
+
+Wat er in dit rapport wordt uitgelegd.
+- Onderzoek: ?
+- Challenge: de opdrachtomschrijving en uitdagingen.
+- Implementatie: welke bestanden er zijn en wat elke (belangrijke) functie doet.
+- Reflectie: wat ik heb geleerd en welke problemen ik tegenkwam.
+- Conclusie: korte samenvatting en mogelijke verbeterpunten.
+- Bronvermelding: alle bronnen en links.
 
 
 ## Onderzoek
@@ -58,9 +91,11 @@ Om markdown te parsen moet er gelet worden op:
 En natuurlijk gebruik van Haskell/functionele programmeertalen, ik heb hier nog nooit eerder mee gewerkt, dus weet ik niet wat best practice is.
 
 ## Implementatie
-> WIP, zet hier nog iets bij over problemen met lists en dergelijke
+> WIP, zet hier nog iets bij over problemen met lists en dergelijke?
 
 In dit hoofdstuk wordt de implementatie uitgelegd per bestand. Elk sub-hoofdstuk heeft een samenvatting van wat het doet, gekoppeld aan functionele concepten. Ook is er een korte uitleg per functie. Niet elke functie wordt omschreven, alleen de interessante/relevante.
+
+> Note: het parsen van lists en list-items had ik nog moeite mee, zie hoofdstuk [reflectie](##Reflectie) en [conclusie](##Conclusie)
 
 In Haskell is alles immutable, dus wordt dit ook niet opgeschreven bij de 'kenmerken'.
 
@@ -87,6 +122,18 @@ Heeft de volgende functies:
 - `replaceHeadings :: String -> String`
 - `main = do`
 
+Overzicht:
+
+| Concept                | `checkForSyntax` | `replaceHeadings` | `main` |
+| ---------------------- | :--------------: | :---------------: | :----: |
+| Pure functions         |        x         |         x         |        |
+| First-class functions  |                  |                   |   x    |
+| Higher-order functions |                  |                   |   x    |
+| Immutability           |        x         |         x         |   x    |
+| Recursie               |                  |         x         |        |
+| Lazy evaluation        |                  |                   |        |
+| Pattern matching       |        x         |         x         |        |
+
 #### checkForSyntax
 `checkForSyntax` checkt per lijn wat voor een type het is. Dit kan een heading, horizontal-line, list, of gewoon een paragraph zijn. Dit wordt gedaan met guards en helper functies om te bepalen wat een lijn bevat. Ook maakt het maakt gebruik van `replaceHeadings` om Markdown headings om te zetten naar HTML headings.
 
@@ -101,10 +148,9 @@ Kenmerken:
 - Recursie
 - Pattern matching
 #### main
-Gebruikt een `map` om door de lijst van lines te itereren, dit is een higher order functie. De output van de map wordt naar een .html bestand geschreven.
+Gebruikt een `map` om door de lijst van lines te itereren, dit is een higher order functie. De output van de map wordt naar een .html bestand geschreven. Ook gebruikt de main `checkForSyntax` als first class function in de `map`.
 
 > WIP
-
 ### MarkdownHelper.hs
 Dit bestand bevat voornamelijk checks, het heeft functies voor het checken voor inline syntax, of iets een list is, etc.  Wordt gebruikt in de andere twee bestanden. `isHorizontalLine` gebruikt recursie en pattern matching.
 
@@ -115,6 +161,18 @@ Heeft de volgende functies:
 - `checkForItalics :: Char -> Bool`
 - `isList :: String -> Bool`
 - `isHorizontalLine :: String -> Bool`
+
+Overzicht:
+
+| Concept                | `wrapWith` | `removeListSyntax` | `checkForBold` | `checkForItalics` | `isList` | `isHorizontalLine` |
+| ---------------------- | :--------: | :----------------: | :------------: | :---------------: | :------: | :----------------: |
+| Pure functions         |     x      |         x          |       x        |         x         |    x     |         x          |
+| First-class functions  |            |                    |                |                   |          |                    |
+| Higher-order functions |            |                    |                |                   |          |                    |
+| Immutability           |     x      |         x          |       x        |         x         |    x     |         x          |
+| Recursie               |            |                    |                |                   |          |         x          |
+| Lazy evaluation        |            |                    |                |                   |          |                    |
+| Pattern matching       |            |                    |       x        |                   |          |         x          |
 
 #### isHorizontalLine
 `isHorizontalLine` heeft een recursieve helper functie om bij te houden of iets een horizontal line is. Gebruikt pattern matching als base case om te herkennen of er meer dan 3 van dezelfde tekens zijn.  
@@ -137,6 +195,19 @@ Kenmerken:
 - Recursie
 - Pattern matching
 
+Overzicht:
+
+| Concept                | `replaceInlineSyntax` |
+| ---------------------- | :-------------------: |
+| pure functions         |           x           |
+| First-class functions  |                       |
+| Higher-order functions |                       |
+| Immutability           |           x           |
+| Recursie               |           x           |
+| Lazy evaluation        |                       |
+| Pattern matching       |           x           |
+
+
 ## Reflectie
 > WIP
 
@@ -147,7 +218,7 @@ Tijdens het leren van Haskell was voor mij gebruik van recursie het meest intere
 
 Waar ik wel achter kwam was het gebruik van lokale helper functies (zie `isHorizontalLine` of `replaceInlineSyntax`) dit maakt recursie voor mij een stuk netter. De recursieve functie is gebundeld in een functie die je gemakkelijk kan aanroepen en hierdoor hoef je geen extra parameters te hebben.
 
-**Moeilijkheden met immutability**  
+**Moeilijkheden met immutability (en parsen van lists)**  
 Waar ik moeite mee had was het missen van mutable variabelen. In andere talen zou ik een `Bool` opslaan om bij te houden of de parser zich binnen een `<ul>` of `<ol>` bevindt, en deze aanpassen per regel. In Haskell is dit niet mogelijk omdat variabelen immutable zijn. 
 
 Omdat mijn logica gebaseerd is op het itereren door regels heen, was dit lastig op te lossen. Uiteindelijk heb ik besloten om alleen de `<li>` tag toe te voegen en de list items niet te wrappen in een `<ul>` of `<ol>` tag, omdat ik hier te veel tijd aan kwijt was.
