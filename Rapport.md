@@ -42,7 +42,7 @@ In dit rapport wordt een Markdown-naar-HTML parser beschreven, geïmplementeerd 
 > WIP
 
 Wat er in dit rapport wordt uitgelegd.
-- Onderzoek: ?
+- Onderzoek: de concepten binnen Haskell en een koppeling aan mijn implementatie.
 - Challenge: de opdrachtomschrijving en uitdagingen.
 - Implementatie: welke bestanden er zijn en wat elke (belangrijke) functie doet.
 - Reflectie: wat ik heb geleerd en welke problemen ik tegenkwam.
@@ -51,10 +51,57 @@ Wat er in dit rapport wordt uitgelegd.
 
 
 ## Onderzoek
-> TODO: koppel concepten van Haskell aan mijn code!
+> TODO: scrhijf kort over de concepten, koppel het dan kort aan mijn code
 
-Voor mijn onderzoek heb ik voornamelijk 
+In dit hoofdstuk worden de functionele concepten binnen Haskell kort uitgelegd en gekoppeld aan mijn implementatie. Zie hoofdstuk "[Implementatie](##Implementatie)" voor uitgebreidere uitleg.
+### Zuiverheid (pure functions)
 
+Binnen Haskell zijn functies puur: bij dezelfde input komt altijd dezelfde output terug en er zijn geen bijeffecten.  IO-acties zijn anders omdat ze met de buitenwereld werken. Bijvoorbeeld `getLine`.  Het resultaat hangt af van wat de gebruiker invoert, waardoor het niet puur is.
+
+```haskell
+getLine :: IO String  -- resultaat hangt af van wat de user input
+```
+
+In dit project is alleen de `main` niet puur, het maakt gebruik van `readFile`. Dit leest een bestand buiten de applicatie, en is dus niet puur. Met dezelfde aanroep kan je alsnog andere resultaten krijgen.
+
+### First-class functions
+> WIP
+
+First-class functions betekent dat functies in behandeld worden als gewone waarden.  Je kunt ze opslaan in variabelen, doorgeven aan andere functies, en als resultaat teruggeven.
+
+```haskell
+map (add 1) [1,2,3] => [2,3,4]
+--    ^ "add" wordt hier gebruikt als een first class function.
+```
+
+In dit project maakt de `main` gebruik van een first-class function. De `map` gebruikt `checkForSyntax` als first-class function.
+
+### ### Higher-order functions
+
+Higher-order functions zijn functies die een andere functie als parameter nemen of een functie teruggeven.
+
+In dit project gebruikt `main` een higher-order functie. De functie `map` neemt een andere functie, `checkForSyntax`, als parameter en past deze toe op elk element van een lijst.
+
+### Immutability
+
+In Haskell zijn alle variabelen immutable. Dit betekent dat een waarde na initialisatie niet meer kan veranderen. In plaats van een variabele aan te passen, maak je een nieuwe variabele aan.
+
+### Lazy evaluation
+
+In Haskell worden expressies pas berekend wanneer hun waarde nodig is. Dit betekent dat berekeningen worden uitgesteld totdat ze gebruikt worden. Bijvoorbeeld `x = 1 + 2` wordt pas berekent wanneer `x` gebruikt wordt.
+
+In dit project wordt er niet echt expliciet gebruik gemaakt van lazy evaluation, maar `isHorizontalLine` gebruikt `||`'s om te checken welke syntaxis gebruikt wordt voor een horizontal line, zodra 1 van de 3 een true returned, worden de anderen niet meer berekent. 
+### Pattern matching
+Pattern matching is een manier om een waarde te interpreteren binnen een functie, hiermee kan je op basis van een waarde, bijvoorbeeld een string, bepalen wat er mee gedaan wordt
+
+```haskell
+mijnFunctie :: String -> String
+mijnFunctie ""       = "niks"
+mijnFunctie [c]      = "1 karakter"
+mijnFunctie (c:cs)   = "meer dan 1 karakter"
+```
+
+In dit project gebruik ik pattern matching voornamelijk als base-case binnen een recursieve functie.
 
 ## Challenge
 > WIP
@@ -72,7 +119,6 @@ Het moet de volgende syntaxis omzetten:
 
 ### Uitdaging
 De grootste uitdaging voor mij ligt bij het 
-
 
 Om markdown te parsen moet er gelet worden op:
 - State tracking over meerdere regels
@@ -137,20 +183,11 @@ Overzicht:
 #### checkForSyntax
 `checkForSyntax` checkt per lijn wat voor een type het is. Dit kan een heading, horizontal-line, list, of gewoon een paragraph zijn. Dit wordt gedaan met guards en helper functies om te bepalen wat een lijn bevat. Ook maakt het maakt gebruik van `replaceHeadings` om Markdown headings om te zetten naar HTML headings.
 
-Kenmerken:
-- Pure function
-- Pattern matching
 #### replaceHeadings
 `replaceHeadings` is een recursieve functie, het looped vanaf `###### ` (h6) naar `# ` (h1) en checkt of het matched met de begin van een lijn. Het heeft lokale helper functies voor het weghalen van Markdown syntax en het parsen naar een HTML tag. Ook maakt het gebruikt patternmatching voor de base case; het heeft dan elke heading vanaf h6 gecheckt.
-
-Kenmerken:
-- Pure function
-- Recursie
-- Pattern matching
 #### main
-Gebruikt een `map` om door de lijst van lines te itereren, dit is een higher order functie. De output van de map wordt naar een .html bestand geschreven. Ook gebruikt de main `checkForSyntax` als first class function in de `map`.
+Gebruikt een `map` met `checkForSyntax` als parameter  om door de lijst van lines te itereren, dit is een higher order functie. De output van de map wordt naar een .html bestand geschreven. Ook gebruikt de main `checkForSyntax` als first class function in de `map`. 
 
-> WIP
 ### MarkdownHelper.hs
 Dit bestand bevat voornamelijk checks, het heeft functies voor het checken voor inline syntax, of iets een list is, etc.  Wordt gebruikt in de andere twee bestanden. `isHorizontalLine` gebruikt recursie en pattern matching.
 
@@ -171,16 +208,11 @@ Overzicht:
 | Higher-order functions |            |                    |                |                   |          |                    |
 | Immutability           |     x      |         x          |       x        |         x         |    x     |         x          |
 | Recursie               |            |                    |                |                   |          |         x          |
-| Lazy evaluation        |            |                    |                |                   |          |                    |
+| Lazy evaluation        |            |                    |                |                   |          |         x          |
 | Pattern matching       |            |                    |       x        |                   |          |         x          |
 
 #### isHorizontalLine
 `isHorizontalLine` heeft een recursieve helper functie om bij te houden of iets een horizontal line is. Gebruikt pattern matching als base case om te herkennen of er meer dan 3 van dezelfde tekens zijn.  
-
-Kenmerken
-- Pure function
-- Recursie
-- Pattern matching
 
 ### InlineParser.hs
 Dit bestand is verantwoordelijk voor het parsen van inline Markdown syntax zoals bold en italics. Het exporteert alleen `replaceInlineSyntax`, die wordt aangeroepen vanuit `MarkdownParser.hs`.
@@ -188,12 +220,7 @@ Dit bestand is verantwoordelijk voor het parsen van inline Markdown syntax zoals
 Heeft de volgende functies:
 - `replaceInlineSyntax :: String -> String`
 #### replaceInlineSyntax
-`replaceInlineSyntax` parsed een string letter voor letter via een recursieve helper functie `go`. Het gebruikt een accumulator om de output op te bouwen. Als een karakter bold of italics syntax is, wordt de juiste HTML tag toegevoegd via de lokale helper functie `openOrCloseTag`.
-
-Kenmerken:
-- Pure function
-- Recursie
-- Pattern matching
+`replaceInlineSyntax` parsed een string letter voor letter via een recursieve helper functie `go`. Het gebruikt een accumulator om de output op te bouwen. Als een karakter bold of italics syntax is, wordt de juiste HTML tag toegevoegd via de lokale helper functie `openOrCloseTag`
 
 Overzicht:
 
@@ -206,7 +233,6 @@ Overzicht:
 | Recursie               |           x           |
 | Lazy evaluation        |                       |
 | Pattern matching       |           x           |
-
 
 ## Reflectie
 > WIP
@@ -229,27 +255,33 @@ Terugkijkend moest ik een stuk meer letten op hoe ik 'begin' met parsen, de `che
 
 Parsen van lists is veel moeilijker dan verwacht, mijn aanpak van het markdown bestand omzetten naar lines en door elke line itereren werkte hier niet goed voor. 
 
-Ik moet meer letten op 
+Ik moet meer letten op de algehele structuur i.p.v. focussen op een klein onderdeel.
+
+
 
 
 ## Bronvermelding
 ### Markdown cheatsheet
- - _Basic Syntax | Markdown Guide_. (z.d.). https://www.markdownguide.org/basic-syntax/ Geraadpleegd op 2026:02:18
+  - _Basic Syntax | Markdown Guide_. (z.d.). https://www.markdownguide.org/basic-syntax/ Geraadpleegd op 2026-02-18
 ### Haskell basics
- - Correct syntax for if statements in Haskell. (z.d.). Stack Overflow. https://stackoverflow.com/questions/15317895/correct-syntax-for-if-statements-in-haskell Geraadpleegd op 2026:02:09
- - Guards vs if-then-else vs cases in Haskell. (z.d.). Stack Overflow. https://stackoverflow.com/questions/9345589/guards-vs-if-then-else-vs-cases-in-haskell Geraadpleegd op 2026:02:17
- - fromMaybe — Zvon Haskell references. (z.d.). http://www.zvon.org/other/haskell/Outputmaybe/fromMaybe_f.html Geraadpleegd op 2026:02:18
- - Claude AI share (f343677d). (z.d.). https://claude.ai/share/f343677d-c70a-48be-b793-b8b9e35446b4 Geraadpleegd op 2026:02:28
- - findIndex — Zvon Haskell references. (z.d.). http://www.zvon.org/other/haskell/Outputlist/findIndex_f.html Geraadpleegd op 2026:02:28
- - Let vs. Where — Haskell Wiki. (z.d.). https://wiki.haskell.org/Let_vs._Where#:~:text=It%20is%20important%20to%20know,line%20of%20a%20function%20definition. Geraadpleegd op 2026:02:28
- - Claude AI share (6f47665d). (z.d.). https://claude.ai/share/6f47665d-c78b-48e2-a3ed-37f980ee7f44 Geraadpleegd op 2026:02:28
+  - Correct syntax for if statements in Haskell. (z.d.). Stack Overflow. https://stackoverflow.com/questions/15317895/correct-syntax-for-if-statements-in-haskell Geraadpleegd op 2026-02-09
+  - Guards vs if-then-else vs cases in Haskell. (z.d.). Stack Overflow. https://stackoverflow.com/questions/9345589/guards-vs-if-then-else-vs-cases-in-haskell Geraadpleegd op 2026-02-17
+  - fromMaybe — Zvon Haskell references. (z.d.). http://www.zvon.org/other/haskell/Outputmaybe/fromMaybe_f.html Geraadpleegd op 2026-02-18
+  - Claude AI share (f343677d). (z.d.). https://claude.ai/share/f343677d-c70a-48be-b793-b8b9e35446b4 Geraadpleegd op 2026-02-28
+  - findIndex — Zvon Haskell references. (z.d.). http://www.zvon.org/other/haskell/Outputlist/findIndex_f.html Geraadpleegd op 2026-02-28
+  - Let vs. Where — Haskell Wiki. (z.d.). https://wiki.haskell.org/Let_vs._Where#:~:text=It%20is%20important%20to%20know,line%20of%20a%20function%20definition. Geraadpleegd op 2026-02-28
+  - Claude AI share (6f47665d). (z.d.). https://claude.ai/share/6f47665d-c78b-48e2-a3ed-37f980ee7f44 Geraadpleegd op 2026-02-28
+  - Haskell. (z.d.). https://www.haskell.org/tutorial/functions.html Geraadpleegd op 2026-03-11
+   - Wikipedia. (z.d.). First‑class function. https://en.wikipedia.org/wiki/First-class_function Geraadpleegd op 2026-03-11
+   - Haskell Wiki. (z.d.). Higher‑order function. https://wiki.haskell.org/Higher_order_function Geraadpleegd op 2026-03-11
+   - Haskell Wiki. (z.d.). Lazy evaluation. https://wiki.haskell.org/Lazy_evaluation Geraadpleegd op 2026-03-11
 ### Pattern matching
- - Pattern matching — FP Block Academy. (z.d.). https://academy.fpblock.com/blog/pattern-matching/ Geraadpleegd op 2026:02:09
- - Is there a better way to write a string contains X method? (z.d.). Stack Overflow. https://stackoverflow.com/questions/8748660/is-there-a-better-way-to-write-a-string-contains-x-method Geraadpleegd op 2026:02:11
- - Claude AI share (85daaf36). (z.d.). https://claude.ai/share/85daaf36-782d-4146-85e6-9dcf640c8a82 Geraadpleegd op 2026:02:28
- - Claude AI share (f78c3152). (z.d.). https://claude.ai/share/f78c3152-d80e-491b-b0ef-3d61b38d4c81 Geraadpleegd op 2026:02:28
+  - Pattern matching — FP Block Academy. (z.d.). https://academy.fpblock.com/blog/pattern-matching/ Geraadpleegd op 2026-02-09
+  - Is there a better way to write a string contains X method? (z.d.). Stack Overflow. https://stackoverflow.com/questions/8748660/is-there-a-better-way-to-write-a-string-contains-x-method Geraadpleegd op 2026-02-11
+  - Claude AI share (85daaf36). (z.d.). https://claude.ai/share/85daaf36-782d-4146-85e6-9dcf640c8a82 Geraadpleegd op 2026-02-28
+  - Claude AI share (f78c3152). (z.d.). https://claude.ai/share/f78c3152-d80e-491b-b0ef-3d61b38d4c81 Geraadpleegd op 2026-02-28
 ### Bestanden lezen
- - Prelude — readFile (Hackage). (z.d.). https://hackage-content.haskell.org/package/base-4.22.0.0/docs/Prelude.html#v:readFile Geraadpleegd op 2026:02:09
- - Haskell — read lines of file (Stack Overflow). (z.d.). https://stackoverflow.com/questions/11022163/haskell-read-lines-of-file Geraadpleegd op 2026:02:17
+  - Prelude — readFile (Hackage). (z.d.). https://hackage-content.haskell.org/package/base-4.22.0.0/docs/Prelude.html#v:readFile Geraadpleegd op 2026-02-09
+  - Haskell — read lines of file (Stack Overflow). (z.d.). https://stackoverflow.com/questions/11022163/haskell-read-lines-of-file Geraadpleegd op 2026-02-17
 ### Commandline
- - Friedbrice — Gist (ef852a5c). (z.d.). https://gist.github.com/friedbrice/ef852a5c61e80686d659024aad3cbd70 Geraadpleegd op 2026:02:09
+  - Friedbrice — Gist (ef852a5c). (z.d.). https://gist.github.com/friedbrice/ef852a5c61e80686d659024aad3cbd70 Geraadpleegd op 2026-02-09
