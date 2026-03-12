@@ -18,7 +18,7 @@ checkForSyntax [] = ""
 checkForSyntax line
   | isPrefixOf "#" line = replaceHeadings line
   | isHorizontalLine line = "<hr>"
-  | isList line = wrapWith (removeListSyntax $ replaceInlineSyntax line) "li" -- 2do remove md list
+  | isList line = wrapWith (removeListSyntax $ replaceInlineSyntax line) "li"
   | otherwise = wrapWith (replaceInlineSyntax line) "p"
 
 -- zet md headings om naar html headings
@@ -45,7 +45,7 @@ replaceHeadings line = go line "###### "
       | otherwise = line
 
 main = do
-  args <- getArgs
+  args <- getArgs -- lezen van cli args
   if null args
     then putStrLn "invalid args"
     else do

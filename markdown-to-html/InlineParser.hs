@@ -17,9 +17,9 @@ replaceInlineSyntax inputString = go False "" inputString -- helper functie voor
     go inSyntax acc (char : rest) -- dit looped totdat de string volledig gelezen is
       | checkForBold char rest -- checked voor bold syntax
         =
-          go (not inSyntax) (acc ++ openOrCloseTag inSyntax "b") (tail rest) -- zet de bijbehorende tag eraan
+          go (not inSyntax) (acc ++ openOrCloseTag inSyntax "b") (tail rest) -- zet de bijbehorende tag in accumulator, recurse ook met 'tail' om de 2e '*' over te slaan
       | checkForItalics char =
-          go (not inSyntax) (acc ++ openOrCloseTag inSyntax "i") rest
+          go (not inSyntax) (acc ++ openOrCloseTag inSyntax "i") rest -- zet de bijbehorende tag in accumulator
       | otherwise = go inSyntax (acc ++ [char]) rest
 
     -- returned een opening- of closing-tag op basis van een bool

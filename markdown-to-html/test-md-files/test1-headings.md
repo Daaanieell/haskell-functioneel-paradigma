@@ -10,6 +10,8 @@ Heading 2 body
 
 Heading 3 body
 
+---
+
 #### Heading 4
 
 Heading 4 body

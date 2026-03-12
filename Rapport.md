@@ -2,10 +2,12 @@
 
 Markdown naar HTML parser
 - **Student:** Daniel Sung (2128145)
-- **Datum:** 10 maart, 2026
+- **Datum:** 12 maart, 2026
 - **Versie:** 1
 - **Docent:** Michel Koolwaaij
 - **Klas:** ITA-CNI-A-f 2025
+
+---
 
 ## Inhoudopgave
 
@@ -37,9 +39,7 @@ Markdown naar HTML parser
 
 ## Inleiding
 
-In dit rapport wordt een Markdown-naar-HTML parser beschreven, geïmplementeerd in Haskell. Het doel is om functionele concepten zoals pure functions, recursie en pattern matching toe te passen in een praktische context.
-
-> WIP
+In dit rapport wordt een Markdown naar HTML parser beschreven, gemaakt in Haskell. Het doel is om functionele concepten zoals pure functions, recursie en pattern matching toe te passen.
 
 Wat er in dit rapport wordt uitgelegd.
 - Onderzoek: de concepten binnen Haskell en een koppeling aan mijn implementatie.
@@ -49,9 +49,7 @@ Wat er in dit rapport wordt uitgelegd.
 - Conclusie: korte samenvatting en mogelijke verbeterpunten.
 - Bronvermelding: alle bronnen en links.
 
-
 ## Onderzoek
-> TODO: scrhijf kort over de concepten, koppel het dan kort aan mijn code
 
 In dit hoofdstuk worden de functionele concepten binnen Haskell kort uitgelegd en gekoppeld aan mijn implementatie. Zie hoofdstuk "[Implementatie](##Implementatie)" voor uitgebreidere uitleg.
 ### Zuiverheid (pure functions)
@@ -65,7 +63,6 @@ getLine :: IO String  -- resultaat hangt af van wat de user input
 In dit project is alleen de `main` niet puur, het maakt gebruik van `readFile`. Dit leest een bestand buiten de applicatie, en is dus niet puur. Met dezelfde aanroep kan je alsnog andere resultaten krijgen.
 
 ### First-class functions
-> WIP
 
 First-class functions betekent dat functies in behandeld worden als gewone waarden.  Je kunt ze opslaan in variabelen, doorgeven aan andere functies, en als resultaat teruggeven.
 
@@ -104,41 +101,33 @@ mijnFunctie (c:cs)   = "meer dan 1 karakter"
 In dit project gebruik ik pattern matching voornamelijk als base-case binnen een recursieve functie.
 
 ## Challenge
-> WIP
-
 ### Opdrachtomschrijving
 Een .md naar .html parser in Haskell. Dit is een CLI-tool waarbij een gegeven bestand als args gegeven kan worden. 
 
 Het moet de volgende syntaxis omzetten:
 - Headings met grootte vanaf 1 t/m 6
 - Horizontal lines
-- Lists (Hier had ik wat problemen mee, wordt later uitgelegd)
+- Lists (Hier had ik wat problemen mee, wordt later uitgelegd, zie [reflectie](##Reflectie))
 - Inline syntax:
 	- Bold
 	- Italics
 
 ### Uitdaging
-De grootste uitdaging voor mij ligt bij het 
 
-Om markdown te parsen moet er gelet worden op:
+De uitdagingen voor een markdown parser zijn:
+- Algemene structuur van een parser: 
+	- Hoe een tekst iteratief verwerkt wordt en hoe rekening gehouden wordt met verschillende soorten syntax, zoals inline syntax, headings en lists.
 - State tracking over meerdere regels
     - List items wrappen in `<ul>` of `<ol>` tags, je moet rekening houden met wat er in een list zit.
     - Het programma werkt line-by-line, maar moet onthouden of je in een list bent
-- Overlappende syntax
-    - Inline syntax (bold/italic) kan voorkomen in headings, lijstitems, paragrafen
-    - Alles moet correct geparsed worden ongeacht context
 - Prioriteit van regels
     - Bepalen welke syntax eerst gecheckt wordt (heading vs list vs paragraph)
     - Zeker stellen dat de juiste tag wordt toegepast
 - Foutieve syntax
     - Gebroken inline syntax (`**bold*`)
-    - Gemengde list syntax (`*` en `-` door elkaar)
-
-En natuurlijk gebruik van Haskell/functionele programmeertalen, ik heb hier nog nooit eerder mee gewerkt, dus weet ik niet wat best practice is.
+    - Gemengde list syntax (`*` en `-` door elkaar) 
 
 ## Implementatie
-> WIP, zet hier nog iets bij over problemen met lists en dergelijke?
-
 In dit hoofdstuk wordt de implementatie uitgelegd per bestand. Elk sub-hoofdstuk heeft een samenvatting van wat het doet, gekoppeld aan functionele concepten. Ook is er een korte uitleg per functie. Niet elke functie wordt omschreven, alleen de interessante/relevante.
 
 > Note: het parsen van lists en list-items had ik nog moeite mee, zie hoofdstuk [reflectie](##Reflectie) en [conclusie](##Conclusie)
@@ -155,6 +144,7 @@ Voor de implementatie heb ik de volgende regels vastgesteld:
 - De kleinste heading is h6
 
 ### MarkdownParser.hs
+
 Dit is het hoofdbestand van de parser. Het roept de inline parser en helper bestand aan. Het parsed Markdown door het bestand op te splitsen in lijnen, vervolgens worden de lijnen geclassificeerd in 4 types:
 1. Headings: `## Mijn heading`
 2. Horizontal lines : `---` , `***` of `___`
@@ -184,7 +174,7 @@ Overzicht:
 `checkForSyntax` checkt per lijn wat voor een type het is. Dit kan een heading, horizontal-line, list, of gewoon een paragraph zijn. Dit wordt gedaan met guards en helper functies om te bepalen wat een lijn bevat. Ook maakt het maakt gebruik van `replaceHeadings` om Markdown headings om te zetten naar HTML headings.
 
 #### replaceHeadings
-`replaceHeadings` is een recursieve functie, het looped vanaf `###### ` (h6) naar `# ` (h1) en checkt of het matched met de begin van een lijn. Het heeft lokale helper functies voor het weghalen van Markdown syntax en het parsen naar een HTML tag. Ook maakt het gebruikt patternmatching voor de base case; het heeft dan elke heading vanaf h6 gecheckt.
+`replaceHeadings` is een recursieve functie, het looped vanaf `###### ` (h6) naar `# ` (h1) en checkt of het matched met de begin van een lijn. Het heeft lokale helper functies voor het weghalen van Markdown syntax en het omzetten naar een HTML tag. Ook maakt het gebruikt pattern matching voor de base case; het heeft dan elke heading vanaf h6 gecheckt.
 #### main
 Gebruikt een `map` met `checkForSyntax` als parameter  om door de lijst van lines te itereren, dit is een higher order functie. De output van de map wordt naar een .html bestand geschreven. Ook gebruikt de main `checkForSyntax` als first class function in de `map`. 
 
@@ -209,7 +199,7 @@ Overzicht:
 | Immutability           |     x      |         x          |       x        |         x         |    x     |         x          |
 | Recursie               |            |                    |                |                   |          |         x          |
 | Lazy evaluation        |            |                    |                |                   |          |         x          |
-| Pattern matching       |            |                    |       x        |                   |          |         x          |
+| Pattern matching       |            |         x          |                |         x         |    x     |         x          |
 
 #### isHorizontalLine
 `isHorizontalLine` heeft een recursieve helper functie om bij te houden of iets een horizontal line is. Gebruikt pattern matching als base case om te herkennen of er meer dan 3 van dezelfde tekens zijn.  
@@ -226,7 +216,7 @@ Overzicht:
 
 | Concept                | `replaceInlineSyntax` |
 | ---------------------- | :-------------------: |
-| pure functions         |           x           |
+| Pure functions         |           x           |
 | First-class functions  |                       |
 | Higher-order functions |                       |
 | Immutability           |           x           |
@@ -235,7 +225,6 @@ Overzicht:
 | Pattern matching       |           x           |
 
 ## Reflectie
-> WIP
 
 ### Functionele paradigma
 
@@ -250,14 +239,13 @@ Waar ik moeite mee had was het missen van mutable variabelen. In andere talen zo
 Omdat mijn logica gebaseerd is op het itereren door regels heen, was dit lastig op te lossen. Uiteindelijk heb ik besloten om alleen de `<li>` tag toe te voegen en de list items niet te wrappen in een `<ul>` of `<ol>` tag, omdat ik hier te veel tijd aan kwijt was.
 
 Terugkijkend moest ik een stuk meer letten op hoe ik 'begin' met parsen, de `checkForSyntax` functie moest anders. In plaats van elke lijn itereren, moet het per letter parsen, dit zou de list-probleem voorkomen. Hierdoor zou ik gemakkelijker de state kunnen bijhouden, dus of iets in een list, bold of italics zit. Hier kwam ik te laat pas achter en was het niet meer waard om alles te refactoren.
+
 ## Conclusie
 > WIP
 
 Parsen van lists is veel moeilijker dan verwacht, mijn aanpak van het markdown bestand omzetten naar lines en door elke line itereren werkte hier niet goed voor. 
 
 Ik moet meer letten op de algehele structuur i.p.v. focussen op een klein onderdeel.
-
-
 
 
 ## Bronvermelding

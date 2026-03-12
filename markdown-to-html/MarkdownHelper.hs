@@ -15,12 +15,11 @@ import Data.Maybe (fromMaybe)
 wrapWith :: String -> String -> String
 wrapWith toWrap tag = "<" ++ tag ++ "> " ++ toWrap ++ " </" ++ tag ++ ">"
 
--- 2do, zet dit als helper ergens
+-- verwijderd md lists, checkt eerst met guards welke type list matched, verwijdert dan de juiste
 removeListSyntax :: String -> String
-removeListSyntax line
-  | isPrefixOf "- " line = fromMaybe line (stripPrefix "- " line)
-  | isPrefixOf "* " line = fromMaybe line (stripPrefix "* " line)
-  | otherwise = line
+removeListSyntax ('-' : ' ' : rest) = rest -- matched of de eerste twee karakters een md list zijn '* ' of '- ', verwijderd je passende syntax
+removeListSyntax ('*' : ' ' : rest) = rest
+removeListSyntax line = line
 
 -- gegeven een string checkt het of de eerste twee karakters een * of _ is
 -- wordt gebruikt in de inline parser om te checken of iets bold is
@@ -30,17 +29,16 @@ checkForBold char rest
   | char == '*' && head rest == '*' || char == '_' && head rest == '_' = True -- bij een (x:xs) checkt het of de eerste karakter 'x' en eerste van de 'xs' hetzelfde is
   | otherwise = False
 
--- checkt of karakter een * of _ is
--- wordt gebruikt in de inline parser om te checken of iets italics is
+-- checkt of karakter een * of _ is, wordt gebruikt om te checken voor italic tags
 checkForItalics :: Char -> Bool
-checkForItalics char = (char == '*' || char == '_')
+checkForItalics '*' = True
+checkForItalics '_' = True
 
 -- checkt of lijn begint met * of -
 isList :: String -> Bool
-isList line
-  | isPrefixOf "* " line = True
-  | isPrefixOf "- " line = True
-  | otherwise = False
+isList ('*' : ' ' : _) = True -- matched voor list syntax '* ' of '- '
+isList ('-' : ' ' : _) = True
+isList _ = False
 
 -- telt *, - of _ op, als er meer dan 3 van dezelfde tekens zijn, dan is het een <hr>
 isHorizontalLine :: String -> Bool

@@ -1,10 +1,11 @@
-List with '-'
+List 1
 
 - Item one
 - Item two
 - Item three
 
-Second list with '*'
+Another list
 
-* Another item
-* Second item
+- Item one
+- Item two
+- Item three
