@@ -33,6 +33,7 @@ checkForBold char rest
 checkForItalics :: Char -> Bool
 checkForItalics '*' = True
 checkForItalics '_' = True
+checkForItalics _ = False
 
 -- checkt of lijn begint met * of -
 isList :: String -> Bool

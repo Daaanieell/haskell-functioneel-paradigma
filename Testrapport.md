@@ -17,24 +17,24 @@ In dit rapport worden 4 Markdown bestanden gebruikt om de parser te testen, het 
 ## Commandos voor testen
 Voor alle tests hieronder gebruik je de hoofdparser `MarkdownParser.hs`. 
 
-Voorbeeldcommando's (voer uit vanaf de projectroot):
+Voorbeeldcommando's (voer uit vanaf de projectroot of binnen de `markdown-to-html` map):
 - Headings test
 ```
-runghc MarkdownParser.hs test-md-files/test1-headings.md
+cabal run markdown-to-html -- ./test-md-files/test1-headings.md
 ```
 - Lists test
 ```
-runghc MarkdownParser.hs test-md-files/test2-lists.md
+cabal run markdown-to-html -- ./test-md-files/test2-lists.md
 ```
 - Inline syntax test
 ```
-runghc MarkdownParser.hs test-md-files/test3-mixed.md
+cabal run markdown-to-html -- ./test-md-files/test3-mixed.md
 ```
 
 ---
 ## Testen tijdens de ontwikkelproces
 
-Tijdens het ontwikkelen voerde ik regelmatig de applicatie uit met `runghc` en lette ik op of `output.html` overeen komt met wat ik verwacht. Dit deed ik per feature, dus bijvoorbeeld de implementatie bold syntax herkenning/parsing. Hierbij probeerde ik een bepaalt resultaat te bereiken, dus bijvoorbeeld dat `<b> Mijn bold test </b>`. Ik gebruikte hierbij een [markdown-guide](https://www.markdownguide.org/basic-syntax/) ik online vond.
+Tijdens het ontwikkelen voerde ik regelmatig de applicatie uit voordat ik committe en lette ik op of `output.html` overeen komt met wat ik verwacht. Dit deed ik per feature, dus bijvoorbeeld de implementatie bold syntax herkenning/parsing. Hierbij probeerde ik een bepaald resultaat te bereiken, bijvoorbeeld `<b> Mijn bold test </b>`. Ik gebruikte hierbij een [markdown-guide](https://www.markdownguide.org/basic-syntax/) die ik online vond.
 
 ## Testcases
 Hier staan testbestanden om de output van de Markdown parser te testen. Let op: test 4 is bedoelt om output te zien van slechte syntax, de parser probeert foutieve syntax niet te corrigeren.

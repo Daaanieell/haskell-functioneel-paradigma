@@ -1,15 +1,12 @@
-module MarkdownParser where
+module MarkdownParser (checkForSyntax) where
 
 import Control.Monad (forM, forM_)
 import Data.List (isInfixOf, isPrefixOf, stripPrefix)
 import Data.Maybe
 import Data.String (String)
-import GHC.Internal.Text.Read (Lexeme (String))
 import InlineParser (replaceInlineSyntax)
 import MarkdownHelper (isHorizontalLine, isList, removeListSyntax, wrapWith)
 import System.Environment
-
-outputPath = "output.html"
 
 -- dit is verantwoordelijk voor regel bij regel parsen
 -- heeft checks per .md syntax: headings, horizontal line, lists en algemene inline parsing (bold en italics)
@@ -46,14 +43,3 @@ replaceHeadings line = go line "###### "
     removeHeading line toRemove
       | isPrefixOf toRemove line = fromMaybe line (stripPrefix toRemove line)
       | otherwise = line
-
-main = do
-  args <- getArgs -- lezen van cli args
-  if null args
-    then putStrLn "invalid args"
-    else do
-      let foundPath = head args
-      file <- readFile foundPath
-      let htmlLines = map checkForSyntax (lines file) -- de map gaat door elke lijn in de gegeven bestand en voert die in checkForSyntax
-      writeFile outputPath (unlines htmlLines)
-      putStrLn ("finished, see output: " ++ outputPath)

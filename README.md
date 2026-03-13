@@ -7,30 +7,32 @@ Links:
 - [Testrapport](./Testrapport.md)
 
 ## Quickstart
+> Dit project gebruikt Cabal
 
-Voor het uitvoeren van de MarkdownParser.hs moet je het volgende doen
-1. Open de `.../haskell-functioneel-paradigma/markdown-to-html` in je terminal
-2. Voer MarkdownParser.hs uit en geef je bestand mee als args, gebruik runghc: `runghc MarkdownParser.hs *jouw md bestand pad*`
-3. Open de `output.html` in de root directory voor de resultaten
+Voor het uitvoeren van de MarkdownParser.hs met cabal moet je het volgende doen
+1. Open de `.../haskell-functioneel-paradigma/markdown-to-html` in je terminal, dit is waar de Cabal project zich bevindt.
+2. Bouw en voer de executable uit met cabal, bijvoorbeeld:
+   `cabal run markdown-to-html -- ./test-md-files/test1-headings.md`
+3. Open de `output.html` in de `markdown-to-html` directory voor de resultaten
 
 ### Tests/voorbeeld uitvoeren
 
 1. Headings en subheadings
 ```bash
-runghc MarkdownParser.hs test-md-files/test1-headings.md
+cabal run markdown-to-html -- ./test-md-files/test1-headings.md
 ```
 
 2. Lists
 ```bash
-runghc MarkdownParser.hs test-md-files/test2-lists.md
+cabal run markdown-to-html -- ./test-md-files/test2-lists.md
 ```
 
 3. Gemengde md bestand
 ```bash
-runghc MarkdownParser.hs test-md-files/test3-mixed.md
+cabal run markdown-to-html -- ./test-md-files/test3-mixed.md
 ```
 
 4. Foutieve md syntax
 ```bash
-runghc MarkdownParser.hs test-md-files/test4-bad-syntax.md
+cabal run markdown-to-html -- ./test-md-files/test4-bad-syntax.md
 ```
