@@ -12,6 +12,10 @@ import MarkdownHelper (checkForBold, checkForItalics)
 replaceInlineSyntax :: String -> String
 replaceInlineSyntax inputString = go False "" inputString -- helper functie voor recursie
   where
+    -- bool: houdt bij of de functie bij een opening of closing tag ('<b>' of '</b>') zit
+    -- string: de accumulator, houdt output van de functie bij
+    -- string: de huidige lijn waar het door heen aan het parsen is
+    -- string: returnen van de accumulator
     go :: Bool -> String -> String -> String
     go _ acc [] = acc
     go inSyntax acc (char : rest) -- dit looped totdat de string volledig gelezen is

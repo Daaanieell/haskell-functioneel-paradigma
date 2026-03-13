@@ -2,7 +2,7 @@
 
 Markdown naar HTML parser
 - **Student:** Daniel Sung (2128145)
-- **Datum:** 12 maart, 2026
+- **Datum:** 13 maart, 2026
 - **Versie:** 1
 - **Docent:** Michel Koolwaaij
 - **Klas:** ITA-CNI-A-f 2025
@@ -73,9 +73,14 @@ map (add 1) [1,2,3] => [2,3,4]
 
 In dit project maakt de `main` gebruik van een first-class function. De `map` gebruikt `checkForSyntax` als first-class function.
 
-### ### Higher-order functions
+### Higher-order functions
 
 Higher-order functions zijn functies die een andere functie als parameter nemen of een functie teruggeven.
+
+```haskell
+map (add 1) [1,2,3] => [2,3,4]
+-- de map gebruikt 'add' als functie in zijn parameter
+```
 
 In dit project gebruikt `main` een higher-order functie. De functie `map` neemt een andere functie, `checkForSyntax`, als parameter en past deze toe op elk element van een lijst.
 
@@ -88,6 +93,7 @@ In Haskell zijn alle variabelen immutable. Dit betekent dat een waarde na initia
 In Haskell worden expressies pas berekend wanneer hun waarde nodig is. Dit betekent dat berekeningen worden uitgesteld totdat ze gebruikt worden. Bijvoorbeeld `x = 1 + 2` wordt pas berekent wanneer `x` gebruikt wordt.
 
 In dit project wordt er niet echt expliciet gebruik gemaakt van lazy evaluation, maar `isHorizontalLine` gebruikt `||`'s om te checken welke syntaxis gebruikt wordt voor een horizontal line, zodra 1 van de 3 een true returned, worden de anderen niet meer berekent. 
+
 ### Pattern matching
 Pattern matching is een manier om een waarde te interpreteren binnen een functie, hiermee kan je op basis van een waarde, bijvoorbeeld een string, bepalen wat er mee gedaan wordt
 
@@ -102,7 +108,7 @@ In dit project gebruik ik pattern matching voornamelijk als base-case binnen een
 
 ## Challenge
 ### Opdrachtomschrijving
-Een .md naar .html parser in Haskell. Dit is een CLI-tool waarbij een gegeven bestand als args gegeven kan worden. 
+Een .md naar .html parser in Haskell. Dit is een CLI-tool waarbij een gegeven bestand als args gegeven kan worden. Herbij wordt foutieve syntax niet gecorrigeerd
 
 Het moet de volgende syntaxis omzetten:
 - Headings met grootte vanaf 1 t/m 6
@@ -144,6 +150,7 @@ Voor de implementatie heb ik de volgende regels vastgesteld:
 - De kleinste heading is h6
 
 ### MarkdownParser.hs
+Zie [bestand](markdown-to-html/MarkdownParser.hs)
 
 Dit is het hoofdbestand van de parser. Het roept de inline parser en helper bestand aan. Het parsed Markdown door het bestand op te splitsen in lijnen, vervolgens worden de lijnen geclassificeerd in 4 types:
 1. Headings: `## Mijn heading`
@@ -179,6 +186,8 @@ Overzicht:
 Gebruikt een `map` met `checkForSyntax` als parameter  om door de lijst van lines te itereren, dit is een higher order functie. De output van de map wordt naar een .html bestand geschreven. Ook gebruikt de main `checkForSyntax` als first class function in de `map`. 
 
 ### MarkdownHelper.hs
+Zie [bestand](markdown-to-html/MarkdownHelper.hs)
+
 Dit bestand bevat voornamelijk checks, het heeft functies voor het checken voor inline syntax, of iets een list is, etc.  Wordt gebruikt in de andere twee bestanden. `isHorizontalLine` gebruikt recursie en pattern matching.
 
 Heeft de volgende functies:
@@ -205,6 +214,8 @@ Overzicht:
 `isHorizontalLine` heeft een recursieve helper functie om bij te houden of iets een horizontal line is. Gebruikt pattern matching als base case om te herkennen of er meer dan 3 van dezelfde tekens zijn.  
 
 ### InlineParser.hs
+Zie [bestand](markdown-to-html/InlineParser.hs)
+
 Dit bestand is verantwoordelijk voor het parsen van inline Markdown syntax zoals bold en italics. Het exporteert alleen `replaceInlineSyntax`, die wordt aangeroepen vanuit `MarkdownParser.hs`.
 
 Heeft de volgende functies:
@@ -231,7 +242,7 @@ Overzicht:
 **Recursie en lokale helper functies**  
 Tijdens het leren van Haskell was voor mij gebruik van recursie het meest interessant, er zijn geen echte for loops in Haskell vanwege immutability. Dit maakte het uitlezen en schrijven in een array moeilijker, je hebt geen `i` , je moet het doen met recursie.
 
-Waar ik wel achter kwam was het gebruik van lokale helper functies (zie `isHorizontalLine` of `replaceInlineSyntax`) dit maakt recursie voor mij een stuk netter. De recursieve functie is gebundeld in een functie die je gemakkelijk kan aanroepen en hierdoor hoef je geen extra parameters te hebben.
+Waar ik wel achter kwam was het gebruik van lokale helper functies (zie `isHorizontalLine` of `replaceInlineSyntax`) dit maakt recursie voor mij een stuk netter. De recursieve functie is gebundeld in een functie die je gemakkelijk kan aanroepen en hierdoor hoef je geen extra parameters te hebben. 
 
 **Moeilijkheden met immutability (en parsen van lists)**  
 Waar ik moeite mee had was het missen van mutable variabelen. In andere talen zou ik een `Bool` opslaan om bij te houden of de parser zich binnen een `<ul>` of `<ol>` bevindt, en deze aanpassen per regel. In Haskell is dit niet mogelijk omdat variabelen immutable zijn. 
@@ -241,11 +252,11 @@ Omdat mijn logica gebaseerd is op het itereren door regels heen, was dit lastig 
 Terugkijkend moest ik een stuk meer letten op hoe ik 'begin' met parsen, de `checkForSyntax` functie moest anders. In plaats van elke lijn itereren, moet het per letter parsen, dit zou de list-probleem voorkomen. Hierdoor zou ik gemakkelijker de state kunnen bijhouden, dus of iets in een list, bold of italics zit. Hier kwam ik te laat pas achter en was het niet meer waard om alles te refactoren.
 
 ## Conclusie
-> WIP
+Dit project was wel een goede introductie tot functioneel programmeren in Haskell. De parser werkt correct voor de meeste Markdown elementen zoals headings, inline syntax en horizontal lines, maar heeft wel een belangrijke beperking: list items worden niet gewrapped in een `<ul>` of `<ol>` tag.
 
-Parsen van lists is veel moeilijker dan verwacht, mijn aanpak van het markdown bestand omzetten naar lines en door elke line itereren werkte hier niet goed voor. 
+De grootste uitdaging was niet de Markdown syntax zelf, maar de manier van denken die Haskell vereist. Recursie en lokale helperfuncties bleken daarvoor een goede oplossing, maar de architectuur van de parser zelf was achteraf niet goed geimplementeert.
 
-Ik moet meer letten op de algehele structuur i.p.v. focussen op een klein onderdeel.
+De kern van het probleem: mijn aanpak van regel-voor-regel itereren werkt goed voor enkelvoudige elementen, maar dit valt uit elkaar zodra je moet "onthouden" wat er in volgende regels gebeurt, wat bij lists het geval is. Een karakter-voor-karakter aanpak had dit opgelost, maar dit inzicht kwam te laat in het ontwikkelproces om nog volledig te refactoren.
 
 
 ## Bronvermelding

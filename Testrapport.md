@@ -2,7 +2,7 @@
 
 Markdown naar HTML parser - testrapport
 - **Student:** Daniel Sung (2128145)
-- **Datum:** 12 maart, 2026
+- **Datum:** 13 maart, 2026
 - **Versie:** 1
 - **Docent:** Michel Koolwaaij
 - **Klas:** ITA-CNI-A-f 2025
@@ -13,7 +13,7 @@ In dit rapport worden 4 Markdown bestanden gebruikt om de parser te testen, het 
 - Headings en horizontal lines
 - Lists
 - Mix van lists, inline syntax, headings en horizontal lines
-- Incorrecte sytnax
+- Incorrecte syntax
 ## Commandos voor testen
 Voor alle tests hieronder gebruik je de hoofdparser `MarkdownParser.hs`. 
 
@@ -32,10 +32,15 @@ runghc MarkdownParser.hs test-md-files/test3-mixed.md
 ```
 
 ---
+## Testen tijdens de ontwikkelproces
+
+Tijdens het ontwikkelen voerde ik regelmatig de applicatie uit met `runghc` en lette ik op of `output.html` overeen komt met wat ik verwacht. Dit deed ik per feature, dus bijvoorbeeld de implementatie bold syntax herkenning/parsing. Hierbij probeerde ik een bepaalt resultaat te bereiken, dus bijvoorbeeld dat `<b> Mijn bold test </b>`. Ik gebruikte hierbij een [markdown-guide](https://www.markdownguide.org/basic-syntax/) ik online vond.
 
 ## Testcases
+Hier staan testbestanden om de output van de Markdown parser te testen. Let op: test 4 is bedoelt om output te zien van slechte syntax, de parser probeert foutieve syntax niet te corrigeren.
 
 ### 1) Headings & horizontal line
+Zie [bestand](./markdown-to-html/test-md-files/test1-headings.md)
 ```
 # Heading 1 <- dit hoort "<h1> Heading 1 </h1>" te zijn
 
@@ -78,14 +83,15 @@ Daarnaast wordt ook gecontroleerd of de parser headings alleen herkent wanneer d
 | Horizontal line                      | `<hr>`                  | Ja, de `---` wordt correct geparsed                    |
 
 ### 2) Lists
+Zie [bestand](./markdown-to-html/test-md-files/test2-lists.md)
 ```
-List 1
+List 1 <- normale tekst moet niet beinvloed worden door lists
 
-- Item one
+- Item one <- elke list item moet zijn eigen <li> tag hebben
 - Item two
 - Item three
 
-Another list
+Another list <- normale tekst moet niet beinvloed worden door lists
 
 - Item one
 - Item two
@@ -105,8 +111,9 @@ Ideaal gezien zouden de list-items ook gewrapped moeten worden in een `<ul>` tag
 | `Another list`                   | `<p>Another list</p>`   | Ja, gewone tekst wordt correct als paragraph weergegeven                                         |
 | Meerdere list items onder elkaar | `<ul> ... </ul>`        | Nee, `<ul>` wrapper is niet geïmplementeerd (zie reflectie hoofdstuk in [rapport](./Rapport.md)) |
 ### 3) Een mix
+Zie [bestand](./markdown-to-html/test-md-files/test3-mixed.md)
 ```
-# My Document
+# My Document 
 
 This is a paragraph with **bold** and _italic_ text.
 
@@ -140,6 +147,7 @@ De test laat ook zien dat de parser nog geen `<ul>` wrapper voor lists implement
 | `## Section Two` | `<h2>Section Two</h2>` | Ja, heading niveau 2 wordt correct toegepast |
 | `More content with **bold** text.` | `<p>More content with <b>bold</b> text.</p>` | Ja, inline bold syntax wordt correct omgezet |
 ### 4) Bad syntax
+Zie [bestand](./markdown-to-html/test-md-files/test4-bad-syntax.md)
 
 ```
 # Valid Heading
@@ -181,7 +189,7 @@ This line continues without a list marker
 
 Dit test hoe de parser slechte syntax parsed, het bevat headings van verschillende niveaus, paragrafen met inline bold en italic syntax, horizontal lines, en list-items met zowel `*` als `-` als markers. Ook zijn er voorbeelden van mismatched of niet afgesloten bold- en italic-tags, nested bold, en headings die geen correcte spacing na de hashes hebben. 
 
-**Conclusie:** werkt zoals verwacht, er was niet gekeken naar foutieve syntax.
+**Conclusie:** *"werkt"* zoals verwacht, er was niet gekeken naar foutieve syntax.
 
 > Note: de parser is **niet** gemaakt om slechte syntax om te zetten, de tabel hieronder is een overview van wat 'fout' gaat.
 

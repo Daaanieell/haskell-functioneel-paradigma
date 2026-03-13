@@ -26,6 +26,9 @@ checkForSyntax line
 replaceHeadings :: String -> String
 replaceHeadings line = go line "###### "
   where
+    -- string: de huidige lijn waarop de functie moet checken voor headings
+    -- string: welke Markdown heading het probeer te matchen
+    -- string: output met juiste HTML-tags
     go :: String -> String -> String
     go line [] = line -- basecase voor als er geen headings matchen
     go line toMatchFor
@@ -51,6 +54,6 @@ main = do
     else do
       let foundPath = head args
       file <- readFile foundPath
-      let htmlLines = map checkForSyntax (lines file)
+      let htmlLines = map checkForSyntax (lines file) -- de map gaat door elke lijn in de gegeven bestand en voert die in checkForSyntax
       writeFile outputPath (unlines htmlLines)
       putStrLn ("finished, see output: " ++ outputPath)
