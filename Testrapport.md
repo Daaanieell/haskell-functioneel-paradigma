@@ -30,6 +30,10 @@ cabal run markdown-to-html -- ./test-md-files/test2-lists.md
 ```
 cabal run markdown-to-html -- ./test-md-files/test3-mixed.md
 ```
+- Foutieve syntax
+```bash
+cabal run markdown-to-html -- ./test-md-files/test4-bad-syntax.md
+```
 
 ---
 ## Testen tijdens de ontwikkelproces

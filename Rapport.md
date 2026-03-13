@@ -41,7 +41,7 @@ Markdown naar HTML parser
 
 In dit rapport wordt een Markdown naar HTML parser beschreven, gemaakt in Haskell. Het doel is om functionele concepten zoals pure functions, recursie en pattern matching toe te passen.
 
-Wat er in dit rapport wordt uitgelegd.
+Wat er in dit rapport wordt uitgelegd:
 - Onderzoek: de concepten binnen Haskell en een koppeling aan mijn implementatie.
 - Challenge: de opdrachtomschrijving en uitdagingen.
 - Implementatie: welke bestanden er zijn en wat elke (belangrijke) functie doet.
@@ -51,7 +51,7 @@ Wat er in dit rapport wordt uitgelegd.
 
 ## Onderzoek
 
-In dit hoofdstuk worden de functionele concepten binnen Haskell kort uitgelegd en gekoppeld aan mijn implementatie. Zie hoofdstuk "[Implementatie](##Implementatie)" voor uitgebreidere uitleg.
+In dit hoofdstuk worden de functionele concepten binnen Haskell uitgelegd en kort gekoppeld aan mijn implementatie. Zie hoofdstuk "[Implementatie](##Implementatie)" voor uitgebreidere uitleg.
 ### Zuiverheid (pure functions)
 
 Binnen Haskell zijn functies puur: bij dezelfde input komt altijd dezelfde output terug en er zijn geen bijeffecten.  IO-acties zijn anders omdat ze met de buitenwereld werken. Bijvoorbeeld `getLine`.  Het resultaat hangt af van wat de gebruiker invoert, waardoor het niet puur is.
@@ -254,7 +254,7 @@ Terugkijkend moest ik een stuk meer letten op hoe ik 'begin' met parsen, de `che
 ## Conclusie
 Dit project was wel een goede introductie tot functioneel programmeren in Haskell. De parser werkt correct voor de meeste Markdown elementen zoals headings, inline syntax en horizontal lines, maar heeft wel een belangrijke beperking: list items worden niet gewrapped in een `<ul>` of `<ol>` tag.
 
-De grootste uitdaging was niet de Markdown syntax zelf, maar de manier van denken die Haskell vereist. Recursie en lokale helperfuncties bleken daarvoor een goede oplossing, maar de architectuur van de parser zelf was achteraf niet goed geimplementeert.
+De grootste uitdaging was niet de Markdown syntax zelf, maar de manier van denken die Haskell vereist. Recursie en lokale helperfuncties bleken daarvoor een goede oplossing, maar de architectuur van de parser zelf was achteraf niet goed geimplementeerd.
 
 De kern van het probleem: mijn aanpak van regel-voor-regel itereren werkt goed voor enkelvoudige elementen, maar dit valt uit elkaar zodra je moet "onthouden" wat er in volgende regels gebeurt, wat bij lists het geval is. Een karakter-voor-karakter aanpak had dit opgelost, maar dit inzicht kwam te laat in het ontwikkelproces om nog volledig te refactoren.
 
